@@ -1,5 +1,6 @@
 
 from .base_classes import *
+from .proxyes import *
 from .schedule import CrawlThread,RouteThread,CheckThread
 from threading import Thread
 from .setting import THREAD_NUM

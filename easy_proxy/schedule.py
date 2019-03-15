@@ -41,6 +41,7 @@ class RouteThread(Thread):
 
 def crawl_thread():
     while True:
+        print(spyder_list)
         for li in spyder_list:
             db.append(li.crawl())
         sleep(60)
