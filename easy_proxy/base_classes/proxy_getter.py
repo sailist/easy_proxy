@@ -45,16 +45,18 @@ class BaseProxy:
         :return:
         '''
         self._validate()
-
+        print("ready to crawl {}".format(self.__class__.__name__))
         final = []
-        for url in self.url_list:
-            url = self.before_request(url,self.before_req_func)
-            response = _request.get(url)
-            response = self.after_request(response,self.after_req_func)
-            for func in self.func_list:
-                response = func(response)
-            final += response## 确保到这一步已经是全ip:port的形式的list了
-
+        try:
+            for url in self.url_list:
+                url = self.before_request(url,self.before_req_func)
+                response = _request.get(url)
+                response = self.after_request(response,self.after_req_func)
+                for func in self.func_list:
+                    response = func(response)
+                final += response## 确保到这一步已经是全ip:port的形式的list了
+        except Exception :
+            print("err when crawl {}".format(self.__class__.__name__))
         final = [p for p in final if self._check_host(p)]
         print("crawl {} of host in {}".format(len(final),str(self.__class__)))
         return final
