@@ -63,6 +63,7 @@ class Proxy_Simple_Db():
     def remove(self,host):
         if hasattr(self.proxys,host):
             self.proxys.pop(host)
+            self.save()
 
     def clear(self):
         self.proxys.clear()
