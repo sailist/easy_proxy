@@ -46,7 +46,7 @@ def crawl_thread():
         sleep(60)
 
 def route_method():
-    start_run(HOST,IP)
+    start_run(IP,HOST)
 
 def check_method():
     while True:
