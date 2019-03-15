@@ -18,6 +18,6 @@ def choice():
 def list_novalid():
     return "\n".join(db.getall_waitting())
 
-def start_run():
-    run(host="localhost",port=9999)
+def start_run(host = "localhost",port = 9999):
+    run(host=host,port=port)
 

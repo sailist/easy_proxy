@@ -1,5 +1,5 @@
 from time import sleep
-from .setting import spyder_list
+from .setting import spyder_list,HOST,IP
 from .base_classes.proxy_store import db
 from .base_classes.proxy_route import start_run
 from threading import Thread
@@ -46,7 +46,7 @@ def crawl_thread():
         sleep(60)
 
 def route_method():
-    start_run()
+    start_run(HOST,IP)
 
 def check_method():
     while True:
