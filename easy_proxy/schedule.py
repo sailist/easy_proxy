@@ -52,16 +52,17 @@ def check_method():
     while True:
         host = db.choice_waitting()
         if host is None:
-            sleep(5)
+            sleep(20)
         else:
             if validUsefulProxy(host):
                 db.append_check(host)
             else:
                 print("valid faild {}".format(host))
 
+        sleep(10)
         host = db.choice()
         if host is None:
-            sleep(5)
+            sleep(20)
         else:
             if not validUsefulProxy(host):
                 print("valid faild {}".format(host))
