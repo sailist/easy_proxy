@@ -5,7 +5,7 @@ from .setting import spyder_list
 import re
 
 def proxy_class(clazz):
-    spyder_list.append(clazz)
+    spyder_list.append(clazz())
 
 
 @proxy_class

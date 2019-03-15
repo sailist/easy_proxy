@@ -42,7 +42,7 @@ class RouteThread(Thread):
 def crawl_thread():
     while True:
         for li in spyder_list:
-            db.append(li().crawl())
+            db.append(li.crawl())
         sleep(60)
 
 def route_method():
