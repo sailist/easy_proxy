@@ -7,18 +7,7 @@ from .setting import db_list
 from functools import wraps
 
 def database_class(cls):
-    instances = {}
-    db_list[cls.__name__] = cls
-
-    @wraps(cls)
-    def getinstance(*args, **kw):
-        if cls not in instances:
-            instances[cls] = cls(*args, **kw)
-            print("add instance")
-        print("get instace"+instances[cls])
-        return instances[cls]
-
-    return getinstance
+    db_list[cls.__name__] = cls()
 
 
 @database_class
@@ -52,12 +41,9 @@ class Proxy_Simple_Db(BaseDB):
     def append_check(self,host):
         if type(host) == list:
             for i in host:
-                print("valid host:{}".format(i))
                 self.proxys[i] = 1
         elif type(host) == str:
             self.proxys[host] = 1
-            print("valid host:{}".format(host))
-
         self.save()
 
     def choice(self):
@@ -103,10 +89,11 @@ class RedisDB(BaseDB):
 
         self.pool = redis.ConnectionPool(db = 1)
         self.db = redis.Redis(connection_pool= self.pool)
+        self.db.flushdb()
         if self.db.exists(self.valid_key):
             hold = self.db.zrevrange(self.valid_key,0,-1)
             for h in hold:
-                self.db.sadd(h)
+                self.db.sadd(self.uncheck_key,h)
             self.db.zremrangebyrank(self.valid_key,0,-1)
         print("initial over.")
 
@@ -120,15 +107,21 @@ class RedisDB(BaseDB):
     def append_check(self, host):
         if type(host) == list:
             for h in host:
-                self.db.sadd(self.valid_key, h)
+                self.db.zadd(self.valid_key, {h:1})
         elif type(host) == str:
-            self.db.sadd(self.valid_key, host)
+            self.db.zadd(self.valid_key, {host:1})
 
     def choice(self):
-        return random.choice(self.db.zrevrange(self.valid_key,0,-1))
+        result = self.db.zrevrange(self.valid_key,0,-1)
+        if len(result) == 0:
+            return None
+        return random.choice(result).decode()
 
     def choice_waitting(self):
-        return self.db.spop(self.uncheck_key,1)
+        result = self.db.spop(self.uncheck_key,1)
+        if len(result) == 0:
+            return None
+        return result[0].decode()
 
     def getall_waitting(self):
         sets = self.db.smembers(self.uncheck_key)
@@ -141,7 +134,7 @@ class RedisDB(BaseDB):
         return sets
 
     def remove(self, host):
-        self.db.srem(self.valid_key,host)
+        self.db.zrem(self.valid_key,host)
 
     def clear(self):
         # self.db.

@@ -6,17 +6,17 @@ from .schedule import CrawlThread,RouteThread,CheckThread
 from threading import Thread
 from .setting import THREAD_NUM,ONLY_STORE,DB,db_list
 
-def run():
-    db = db_list[DB]()
 
+
+def run():
     thread_list = []
-    thread_list.append(CrawlThread(1,"crawl",1,db))
+    thread_list.append(CrawlThread(1,"crawl",1))
 
     if not ONLY_STORE:
-        thread_list.append(RouteThread(2,"route",2,db))
+        thread_list.append(RouteThread(2,"route",2))
 
     for i in range(THREAD_NUM["check"]):
-        ch = CheckThread(i,"check_{}".format(i),i,db)
+        ch = CheckThread(i,"check_{}".format(i),i)
         thread_list.append(ch)
 
     for ch in thread_list:

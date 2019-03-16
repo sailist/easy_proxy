@@ -58,7 +58,7 @@ def check_method():
                 db.append_check(host)
             else:
                 print("valid faild {}".format(host))
-
+        host = None
         host = db.choice()
         if host is None:
             sleep(5)

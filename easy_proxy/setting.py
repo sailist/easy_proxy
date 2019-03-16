@@ -12,12 +12,12 @@ HOST = 9999
 ONLY_STORE = False
 
 THREAD_NUM = {
-    "check":8,
+    "check":1,
     "crawl":1,
     "route":1
 }
 
-DB = "Proxy_Simple_Db"
+DB = "RedisDB"
 db = None
 
 DB_SETTING = {
