@@ -1,5 +1,5 @@
 from bottle import route,run
-from .proxy_store import db
+
 
 @route("/choice")
 def choice():
@@ -18,6 +18,16 @@ def choice():
 def list_novalid():
     return "\n".join(db.getall_waitting())
 
-def start_run(host = "localhost",port = 9999):
+def start_run(host = "localhost",port = 9999,usedb = None):
+    global db
+
+    if usedb is None:
+        from .proxy_store import Proxy_Simple_Db
+        db = Proxy_Simple_Db()
+    elif type(usedb) == type:
+        db = usedb()
+    else:
+        db = usedb
+
     run(host=host,port=port)
 
